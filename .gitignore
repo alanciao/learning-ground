@@ -1,0 +1,16 @@
+# OS
+.DS_store
+
+# IDE
+.idea/
+
+# Log
+*.log
+
+# build
+dist/
+build/
+
+#Libs
+libs/
+node_modules/

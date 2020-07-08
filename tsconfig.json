@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "es6", "dom.iterable"],
+    "sourceMap": true,
+    "jsx": "react",
+    "strict": true,
+    "baseUrl": ".",
+    "allowJs": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "libs"
+  ]
+}

@@ -12,5 +12,5 @@ dist/
 build/
 
 #Libs
-libs/
+/libs
 node_modules/

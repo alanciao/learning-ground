@@ -18,7 +18,9 @@
   },
   "scripts": {
     "build": "webpack",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "test": "jest --logHeapUsage",
+    "test:watch": "jest --watch --logHeapUsage"
   },
   "dependencies": {
     "dsbridge": "3.1.3",

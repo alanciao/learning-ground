@@ -1,7 +1,7 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
-const esModules = ['@cmao', 'lodash-es',].join('|');
+// const esModules = ['@cmao', 'lodash-es',].join('|');
 
 module.exports = {
   // All imported modules in your tests should be mocked automatically
@@ -20,7 +20,7 @@ module.exports = {
   // clearMocks: false,
 
   // Indicates whether the coverage information should be collected while executing the test
-  collectCoverage: true,
+  collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: null,
@@ -61,7 +61,7 @@ module.exports = {
 
   // A set of global variables that need to be available in all test environments
   globals: {
-    __DEV__: false,
+    __DEV__: true,
   },
 
   // An array of directory names to be searched recursively up from the requiring module's location
@@ -80,10 +80,10 @@ module.exports = {
   // ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
-  moduleNameMapper: {
-    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-    "\\.(css|less|scss|sass)$": "identity-obj-proxy"
-  },
+  // moduleNameMapper: {
+  //   "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+  //   "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+  // },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -127,13 +127,13 @@ module.exports = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: ["./enzyme.config.js", "<rootDir>/__mocks__/SVGPathElementMock.js", "jest-canvas-mock"],
+  // setupFiles: ["./enzyme.config.js", "<rootDir>/__mocks__/SVGPathElementMock.js", "jest-canvas-mock"],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ["<rootDir>/__mocks__/console_mock.js"],
+  // setupFilesAfterEnv: ["<rootDir>/__mocks__/console_mock.js"],
 
   // A list of paths to snapshot serializer modules Jest should use for snapshot testing
-  snapshotSerializers: ["enzyme-to-json/serializer"],
+  // snapshotSerializers: ["enzyme-to-json/serializer"],
 
   // The test environment that will be used for testing
   // testEnvironment: "jest-environment-jsdom",
@@ -152,8 +152,7 @@ module.exports = {
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: [
-    "/node_modules/",
-    "<rootDir>/test-demo/"
+    "/node_modules/"
   ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
@@ -178,7 +177,7 @@ module.exports = {
   // transformIgnorePatterns: [
   //   "/node_modules/"
   // ],
-  transformIgnorePatterns: [`/node_modules/(?!(${esModules})/)`],
+  // transformIgnorePatterns: [`/node_modules/(?!(${esModules})/)`],
 
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them

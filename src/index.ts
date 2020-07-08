@@ -4,6 +4,6 @@ import { NativeBridge } from './bridge';
 
 (window as any).Redux = Redux;
 
-new NativeBridge((action) => console.log(action));
+(window as any).bridge = new NativeBridge((action) => console.log(action));
 
 // main();

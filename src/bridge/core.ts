@@ -6,10 +6,10 @@ class DsBridge {
   constructor() {
     if (global._dsf) { return; }
 
-    this.registerGlobal();
+    this._registerGlobal();
 
     this.register('_hasJavascriptMethod', (method:string) => {
-      const [namespace, m] = this.parseMethod(method);
+      const [namespace, m] = this._parseMethod(method);
       if (!namespace) {
         return !!(global._dsf[m] || global._dsaf[m]);
       }
@@ -19,7 +19,7 @@ class DsBridge {
     });
   }
 
-  private registerGlobal() {
+  private _registerGlobal() {
     global._dsf = { _obs: {} };
     global._dsaf = { _obs: {} };
     global.dscb = 0;
@@ -55,7 +55,7 @@ class DsBridge {
         callAsyn(af, global._dsaf);
       } else {
         // with namespace
-        const [namespace, method] = this.parseMethod(info.method);
+        const [namespace, method] = this._parseMethod(info.method);
         if (!namespace) { return; }
         let obs = global._dsf._obs;
         let obj = obs[namespace] || {};
@@ -127,7 +127,7 @@ class DsBridge {
     this.call('_dsb.disableJavascriptDialogBlock', { disable });
   }
 
-  private parseMethod(method:string) : [string, string] {
+  private _parseMethod(method:string) : [string, string] {
     const name = method.split('.');
     if (name.length < 2) { return ['', name[0]]; }
     return [name.pop() || '', name.join('.')];

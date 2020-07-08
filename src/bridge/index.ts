@@ -3,24 +3,40 @@ import * as I from './interfaces';
 import { dsBridge } from './core';
 
 export class NativeBridge {
-  protected _bridge = dsBridge;
-  private _currentState:any;
+  private _bridge = dsBridge;
+  private _currentState:I.State|undefined;
   private _currentHandler:I.Handler;
+  private _currentListeners:I.Listener[];
+  private _isHandling:boolean;
 
-  constructor(rootHandler:I.Handler) {
-    if (typeof rootHandler !== 'function') {
+  constructor(handler:I.Handler) {
+    if (typeof handler !== 'function') {
       throw new Error('Expected the rootHandler to be a function');
     }
-    this._currentHandler = rootHandler;
-    this._bridge.register('postMessage', this.onSyncMessages);
-    this._bridge.registerAsyn('postMessageAsyn', this.onAsyncMessages);
+    this._currentHandler = handler;
+    this._currentListeners = [];
+    this._isHandling = false;
+
+    this._bridge.register('postMessage', this._onMessages.bind(this));
+    this._bridge.registerAsyn('postMessageAsyn', this._onMessages.bind(this));
   }
 
-  public getState() : any {
-    return this._currentState;
+  public getState() : I.State {
+    if (this._isHandling) {
+      throw new Error('Can\'t get state while handling an action.');
+    }
+
+    return this._currentState as I.State;
   }
 
-  public postMessage(type:string, payload:any = '', cb?:Function) : any {
+  /**
+   * Post message to native.
+   *
+   * @param type
+   * @param payload
+   * @param cb
+   */
+  public postMessage(type:string, payload:any = '', cb?:Function) {
     const arg = { type, payload };
     if (cb) {
       this._bridge.call('postMessageAsyn', arg, cb);
@@ -29,35 +45,38 @@ export class NativeBridge {
     }
   }
 
-  private onSyncMessages = (type:string, payload:any) => {
-    const action = this.parseAction(type, payload);
-
-    try {
-      const result = this._currentHandler(action);
-      return result !== undefined ? result : JSON.stringify({ status: true, message: 'success' });
-    } catch (e) {
-      return JSON.stringify({ status: false, message:e && e.message });
+  public dispatch(action:I.Action) {
+    if (this._isHandling) {
+      return JSON.stringify({ status: false, message: 'Bridge may not dispatch actions.' });
     }
+
+    let ret;
+    try {
+      this._isHandling = true
+      ret = this._currentHandler(this._currentState, action)
+    } catch(e) {
+      ret = JSON.stringify({ status: false, message: e && e.message });
+    } finally {
+      this._isHandling = false
+    }
+
+    // notify listeners
+
+    return ret;
   }
 
-  private onAsyncMessages = async (type:string, payload:any, cb:Function) => {
-    const action = this.parseAction(type, payload);
-
-    try {
-      const result = await this._currentHandler(action);
-      cb(result);
-    } catch (e) {
-      cb(JSON.stringify({ status: false, message: e && e.message }));
-    }
+  private _onMessages(type:string, payload:any, callback?:Function) {
+    const action = this._parseAction(type, payload, callback);
+    return this.dispatch(action);
   }
 
-  private parseAction(type:string, payload:any) : I.Action {
+  private _parseAction(type:string, payload:any, callback?:Function) : I.Action {
     try {
       payload = JSON.parse(payload);
     } catch (e) {
       payload = null;
     }
 
-    return { type, payload };
+    return { type, payload, callback };
   }
 }

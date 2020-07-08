@@ -1,0 +1,6 @@
+[submodule "libs/redux"]
+	path = libs/redux
+	url = git@github.com:reduxjs/redux.git
+[submodule "libs/react-redux"]
+	path = libs/react-redux
+	url = git@github.com:reduxjs/react-redux.git

@@ -5,5 +5,5 @@
 	path = libs/react-redux
 	url = git@github.com:reduxjs/react-redux.git
 [submodule "redux-actions"]
-	path = redux-actions
+	path = libs/redux-actions
 	url = git@github.com:redux-utilities/redux-actions.git

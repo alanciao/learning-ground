@@ -7,3 +7,6 @@
 [submodule "libs/redux-saga"]
 	path = libs/redux-saga
 	url = git@github.com:redux-saga/redux-saga.git
+[submodule "libs/redux-actions"]
+	path = libs/redux-actions
+	url = git@github.com:redux-utilities/redux-actions.git

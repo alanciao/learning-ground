@@ -4414,6 +4414,11 @@ readdirp@~3.4.0:
   dependencies:
     picomatch "^2.2.1"
 
+reduce-reducers@0.4.3:
+  version "0.4.3"
+  resolved "https://registry.npm.taobao.org/reduce-reducers/download/reduce-reducers-0.4.3.tgz#8e052618801cd8fc2714b4915adaa8937eb6d66c"
+  integrity sha1-jgUmGIAc2PwnFLSRWtqok3621mw=
+
 regenerator-runtime@^0.13.4:
   version "0.13.5"
   resolved "https://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.13.5.tgz?cache=0&sync_timestamp=1584052481783&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fregenerator-runtime%2Fdownload%2Fregenerator-runtime-0.13.5.tgz#d878a1d094b4306d10b9096484b33ebd55e26697"

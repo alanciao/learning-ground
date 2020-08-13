@@ -185,6 +185,7 @@ export class MidiFile {
       if ((eventTypeByte & 0x80) === 0) {
         // running status - reuse lastEventTypeByte as the event type.
 				// eventTypeByte is actually the first parameter
+        // TODO what is running status?
         param1 = eventTypeByte;
         eventTypeByte = this.lastEventTypeByte as number;
       } else {

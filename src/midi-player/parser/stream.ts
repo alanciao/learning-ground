@@ -1,6 +1,6 @@
 import { BinaryString } from './interfaces';
 
-export class Stream {
+export class StringStream {
   private position:number = 0;
 
   constructor(private str:BinaryString) {}

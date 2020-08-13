@@ -1,6 +1,5 @@
-import { parseMidi } from '../parser';
-import { MidiFile } from '../parser/midifile';
 import { TrackStates, NextEvent, MidiEventSubtype, MidiTemporal } from '../interfaces';
+import { MidiFile } from '../../midi-player/parser/interfaces';
 
 const clone = (obj:any) => {
   if (typeof obj !== 'object' || obj === null) { return obj; }

@@ -38,12 +38,8 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, 'src/assets/demo.midi'),
-          to: 'assets/demo.midi',
-        },
-        {
-          from: path.resolve(__dirname, 'src/assets/shim'),
-          to: 'assets/shim',
+          from: path.resolve(__dirname, 'src/assets'),
+          to: 'assets',
         },
       ],
     }),

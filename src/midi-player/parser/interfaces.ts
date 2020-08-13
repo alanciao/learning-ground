@@ -1,5 +1,10 @@
 export type BinaryString = string;
 
+export interface MidiFile {
+  header:MidiHeader;
+  tracks:MidiTrack[];
+}
+
 export interface MidiHeader {
   formatType:number;
   trackCount:number;

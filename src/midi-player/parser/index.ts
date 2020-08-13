@@ -4,7 +4,7 @@ import { StringStream } from './stream';
 export class MidiFileParser {
   private _lastEventTypeByte:number = 0;
 
-  public parse(fileString:I.BinaryString) {
+  public parse(fileString:I.BinaryString) : I.MidiFile {
     const stream = new StringStream(fileString);
     const headerChunk = this._readChunk(stream);
     if (headerChunk.id !== 'MThd' || headerChunk.length !== 6) {

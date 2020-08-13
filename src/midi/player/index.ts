@@ -1,4 +1,4 @@
-import { parseMidi } from '../parser';
+import { MidiFileParser } from '../../midi-player/parser';
 import { Replayer } from './replayer';
 import { PluginLoader } from './loader';
 import { MidiTemporal, Options, MidiEventSubtype } from '../interfaces';
@@ -60,7 +60,7 @@ export class Player {
 
   private loadMidiFile(onsuccess?:Function, onerror?:Function, onprogress?:Function) {
     try {
-      this._replayer = new Replayer(parseMidi(this._currentData), this._timeWarp, this._bpm);
+      this._replayer = new Replayer(new MidiFileParser().parse(this._currentData), this._timeWarp, this._bpm);
       this._data = this._replayer.getData();
       this._endTime = this._getLength();
       this.loader.loadResource({ onsuccess, onerror, onprogress });

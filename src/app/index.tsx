@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { iMIDI } from '../midi';
+import * as Midi from '../midi-player';
 
 function Playground() {
   const input = React.useRef(null);
@@ -23,6 +24,10 @@ function Playground() {
     }, (error:Error) => console.log(error));
 
     (window as any).player = player;
+
+    const midiPlayer = new Midi.Player();
+
+    (window as any).iPlayer = midiPlayer;
   };
 
   return (

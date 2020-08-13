@@ -11,25 +11,25 @@ function Playground() {
   const clickButton = async () => {
     const midiFile = require('../assets/test.midi').default;
     // console.log(atob(midiFile.split(',')[1]));
-    MIDI.USE_XHR = false;
-    MIDI.Player.loadFile(midiFile, () => {
-      // MIDI.Player.start();
-    });
+    // MIDI.USE_XHR = false;
+    // MIDI.Player.loadFile(midiFile, () => {
+    //   // MIDI.Player.start();
+    // });
 
-    const player = new iMIDI.Player({
-      api: 'webaudio',
-      instruments: [
-        'acoustic_grand_piano',
-        'acoustic_guitar_steel',
-        'violin',
-      ],
-      local: true,
-    });
-    player.loadBase64File(midiFile, () => {
-      // player.start();
-    }, (error:Error) => console.log(error));
+    // const player = new iMIDI.Player({
+    //   api: 'webaudio',
+    //   instruments: [
+    //     'acoustic_grand_piano',
+    //     'acoustic_guitar_steel',
+    //     'violin',
+    //   ],
+    //   local: true,
+    // });
+    // player.loadBase64File(midiFile, () => {
+    //   // player.start();
+    // }, (error:Error) => console.log(error));
 
-    (window as any).player = player;
+    // (window as any).player = player;
   };
 
   return (

@@ -1,7 +1,7 @@
 import { IAudioPlugin } from './interfaces';
 
 export class AudioTagPlugin implements IAudioPlugin {
-  public connect(onsuccess?:Function) {}
+  public async connect() {}
 
   public setVolume(volume:number, delay:number = 0) {}
 

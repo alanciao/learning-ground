@@ -86,11 +86,11 @@ export class PluginLoader {
       }
     };
 
-    this._instruments.forEach((instrumentId) => {
-      if (SoundFont[instrumentId]) {
+    this._instruments.forEach((instrumentName) => {
+      if (SoundFont[instrumentName]) {
         waitForEnd();
       } else {
-        this._sendRequest(instrumentId, {
+        this._sendRequest(instrumentName, {
           onprogress: () => {},
           onsuccess: waitForEnd,
           onerror: options.onerror,
@@ -99,8 +99,8 @@ export class PluginLoader {
     });
   }
 
-  private _sendRequest(instrumentId:string, options:EventOptions) {
-    const soundFontPath = `${this.soundFontBaseUrl}${instrumentId}-${this._audioFormat}.js`;
+  private _sendRequest(instrumentName:string, options:EventOptions) {
+    const soundFontPath = `${this.soundFontBaseUrl}${instrumentName}-${this._audioFormat}.js`;
     if (this._local) {
       localScriptLoader.add({
         url: soundFontPath,

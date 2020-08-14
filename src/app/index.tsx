@@ -1,33 +1,37 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { iMIDI } from '../midi';
 import * as Midi from '../midi-player';
+import { acoustic_grand_piano } from '../midi/soundfont/acoustic_grand_piano-mp3';
 
 function Playground() {
   const input = React.useRef(null);
 
   const clickButton = async () => {
-    const midiFile = require('../assets/t.midi').default;
+    const midiFile = require('../assets/test.midi').default;
 
-    const player = new iMIDI.Player({
-      api: 'webaudio',
+    // Midi.soundFont.violin = {};
+    Midi.soundFont.acoustic_grand_piano = acoustic_grand_piano;
+
+    const midiPlayer = new Midi.Player({
+      targetFormat: 'mp3',
       instruments: [
         'acoustic_grand_piano',
-        'acoustic_guitar_steel',
-        'violin',
       ],
       local: true,
     });
-    player.loadBase64File(midiFile, () => {
-      player.start();
-    }, (error:Error) => console.log(error));
 
-    (window as any).player = player;
+    midiPlayer.loadBase64File(midiFile, {
+      onsuccess: () => {
+        console.log('load success');
+      },
+      onprogress: (progress:number) => {
+        console.log('progress: ', progress);
+      },
+      onerror: (error:Error) => console.log(error),
+    });
 
-    const midiPlayer = new Midi.Player();
-
-    (window as any).iPlayer = midiPlayer;
+    (window as any).player = midiPlayer;
   };
 
   return (

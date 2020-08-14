@@ -10,3 +10,6 @@
 [submodule "libs/redux-actions"]
 	path = libs/redux-actions
 	url = git@github.com:redux-utilities/redux-actions.git
+[submodule "libs/Tone"]
+	path = libs/Tone
+	url = git@github.com:Tonejs/Tone.js.git

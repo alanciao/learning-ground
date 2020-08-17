@@ -25,7 +25,7 @@ module.exports = {
         use: ['css-loader', 'style-loader'],
       },
       {
-        test: /\.midi$/,
+        test: /\.(midi|mid|MID)$/,
         use: 'url-loader',
       },
     ],

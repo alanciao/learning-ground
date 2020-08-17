@@ -1,114 +1,95 @@
-import { Options, EventOptions, AudioDetectSupports } from '../interfaces';
-import { audioDetect, localScriptLoader } from '../utils';
-import { SoundFont } from '../soundfont';
-import { plugins } from './plugins';
+import * as I from './interfaces';
+import { AudioType, IAudioPlugin } from '../plugins/interfaces';
+import { audioDetect } from './audioDetect';
+import { getPlugin } from '../plugins';
+
+declare const soundFont:any;
 
 const DEFAULT_SOUND_FONT_BASE_URL = './soundfont/';
 
-export class PluginLoader {
-  public readonly soundFontBaseUrl?:string;
-  public ctx:any;
+export class Loader {
+  private _api?:AudioType;
+  private _soundFontBaseUrl:string;
+  private _instruments:string[];
+  private _audioFormat?:I.AudioFormat;
+  private _local?:boolean;
 
-  private _api:string = '';
-  private _audioFormat:string = 'mp3';
-  private _supports:AudioDetectSupports = {};
-  private _instruments:string[] = ['acoustic_grand_piano'];
-  private _local:boolean = true;
+  private _supports?:I.AudioDetectSupports;
+  private _isLoading:boolean = false;
+  private _plugin?:IAudioPlugin;
 
-  private _init:boolean = false;
-  private _context:any = { currentTime: 0 };
-
-  constructor(options:Options) {
-    this.soundFontBaseUrl = options.soundFontBaseUrl || DEFAULT_SOUND_FONT_BASE_URL;
-    this._local = !!options.local;
-    audioDetect((supports:AudioDetectSupports) => {
-      this._supports = supports;
-      if (options.api && supports[options.api]) {
-        this._api = options.api;
-      } else if (supports.webmidi) {
-        this._api = 'webmidi';
-      } else if (window.AudioContext) {  // Chrome
-        this._api = 'webaudio';
-      } else if (window.Audio) {  // Firefox
-        this._api = 'audiotag';
-      }
-
-      // use audio/ogg when supported
-      this._audioFormat = options.targetFormat || (supports['audio/ogg'] ? 'ogg' : 'mp3');
-      if (options.instruments) {
-        const instruments:string[] = [];
-        options.instruments.forEach((instrument) => {
-          if (typeof instrument === 'number') {
-            console.log('number instrument ', instrument);
-            return;
-          }
-          instruments.push(instrument);
-        });
-        this._instruments = instruments;
-      }
-
-      this._init = true;
-    });
+  constructor(config:I.Configuration) {
+    this._api = config.api;
+    this._soundFontBaseUrl = config.soundFontBaseUrl || DEFAULT_SOUND_FONT_BASE_URL;
+    this._instruments = config.instruments || ['acoustic_grand_piano'];
+    this._audioFormat = config.targetFormat;
+    this._local = config.local;
   }
 
   public getApi() {
     return this._api;
   }
 
-  public getContext() {
-    return this._context;
-  }
+  public async loadPlugin() : Promise<IAudioPlugin | undefined> {
+    if (!this._isLoading) {
+      this._isLoading = true;
 
-  public loadResource(options:EventOptions) {
-    if (!this._init) {
-      setTimeout(() => this.loadResource(options), 0);
-      return;
-    }
+      if (this._plugin) {
+        await this._plugin.connect();
+        this._isLoading = false;
+        return this._plugin;
+      }
 
-    const getContext = plugins[this._api];
-    if (!getContext) { return; }
+      this._supports = await audioDetect();
 
-    if (this._api === 'webmidi') {
-      getContext().connect(options);
-      return;
-    }
-
-    const { onprogress, onerror } = options;
-    const length = this._instruments.length;
-    let pending = length;
-    const waitForEnd = () => {
-      if (!--pending) {
-        onprogress && onprogress('load', 1.0);
-         this.ctx = getContext().connect(options);
-        if (this._api === 'webaudio') {
-          this._context = this.ctx.getContext();
+      if (!this._api || !this._supports[this._api]) {
+        if (this._supports['webMidi']) {
+          this._api = 'webMidi';
+        } else if (this._supports['webAudio']) {
+          this._api = 'webAudio';
+        } else if (this._supports['audioTag']) {
+          this._api = 'audioTag';
         }
       }
-    };
-
-    this._instruments.forEach((instrumentName) => {
-      if (SoundFont[instrumentName]) {
-        waitForEnd();
-      } else {
-        this._sendRequest(instrumentName, {
-          onprogress: () => {},
-          onsuccess: waitForEnd,
-          onerror: options.onerror,
-        });
+      
+      if (this._audioFormat) {
+        this._audioFormat = this._supports.ogg ? 'ogg' : 'mp3';
       }
-    });
+
+      this._plugin = getPlugin(this._api);
+      if (this._plugin) {
+        await this.loadResource(this._instruments);
+        await this._plugin.connect();
+        this._isLoading = false;
+      } else {
+        throw new Error('Cannot load suitable audio plugin.')
+      }
+      return this._plugin;
+    }
   }
 
-  private _sendRequest(instrumentName:string, options:EventOptions) {
-    const soundFontPath = `${this.soundFontBaseUrl}${instrumentName}-${this._audioFormat}.js`;
-    if (this._local) {
-      localScriptLoader.add({
-        url: soundFontPath,
-        onerror: options.onerror,
-        onsuccess: options.onsuccess,
-      });
-    } else {
-      throw new Error('Load from url is not supported yet');
+  public async loadResource(instruments:string[], onprogress?:Function) : Promise<void> {
+    if (this._api === 'webMidi') {
+      //
+      return;
     }
+
+    let count = 0;
+    const total = instruments.length;
+    const promiseQueue = instruments.map(async (instrumentName) => {
+      if (soundFont[instrumentName]) {
+        onprogress && onprogress({ total, count: ++count });
+        return;
+      }
+      return this._requestResource().then(() => {
+        onprogress && onprogress({ total, count: ++count });
+      });
+    });
+
+    await Promise.all(promiseQueue);
+  }
+
+  private async _requestResource() : Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }

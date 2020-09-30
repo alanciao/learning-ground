@@ -21,7 +21,8 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['css-loader', 'style-loader'],
+        use: ['style-loader', 'css-loader'],
+        exclude: [/node_modules/],
       },
       {
         test: /\.(midi|mid|MID)$/,

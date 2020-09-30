@@ -1,0 +1,21 @@
+body {
+  background: #222;
+}
+
+.container {
+  position: absolute;
+  width: 800px;
+  height: 350px;
+  border: 1px solid black;
+  border-radius: 5px;
+  top: 120px;
+  left: 100px;
+  /* background: #eee; */
+  background-image:-webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+}
+
+.title {
+  height: 30px;
+  margin: 25px;
+  text-align: center;
+}

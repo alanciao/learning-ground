@@ -1,0 +1,44 @@
+.bar-wrapper {
+  position: relative;
+  width: calc(100% - 80px);
+  height: 40px;
+  margin: 10px 40px;
+  display: flex;
+  flex-direction: row;
+}
+
+.bar-label {
+  width: 120px;
+  text-align: center;
+}
+
+.bar-outer {
+  overflow: hidden;
+  position: relative;
+  flex: 1;
+  height: 10px;
+  border: 2px solid #171b4d;
+  border-radius: 10px;
+  background-color: rgb(156, 188, 214);
+}
+
+.bar-inner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 10px;
+  width: 0;
+  background-color: rgb(53, 94, 228);
+}
+
+.bar-value {
+  color: #fff;
+  position: absolute;
+  font-size: 0.6rem;
+  right: 4px;
+}
+
+.bar-total {
+  width: 50px;
+  text-align: right;
+}

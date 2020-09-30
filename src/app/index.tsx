@@ -1,64 +1,53 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { acoustic_grand_piano } from '../midi/assets/acoustic_grand_piano-mp3';
+import { Bar } from './bar';
 
-import { MidiFileParser } from '../midi/parser';
-import { GM, soundFont } from '../midi/core';
-import { MidiAnalyser } from '../midi/analyser';
-import { Player } from '../midi/player';
+import './style.css';
 
-const midiFile = require('../assets/25537star01.midi').default;
+interface BarItem {
+  name:string;
+  total:number;
+  value:number;
+}
+
+const items:BarItem[] = [
+  { name: 'Bread', total: 400, value: 50 },
+  { name: 'Yogurt', total: 400, value: 50 },
+  { name: 'Chicken', total: 1280, value: 120 },
+  { name: 'Beef', total: 320, value: 80 }
+];
+const TITLES = ['Basic', 'Upgrade', 'Luxury', 'Supreme'];
 
 function Playground() {
-  const clickButton = async () => {
-    // Midi.soundFont.violin = {};
-    soundFont.acoustic_grand_piano = acoustic_grand_piano;
+  const [values, setValues] = React.useState([50, 50, 120, 80]);
+  const [title, setTitle] = React.useState('Basic');
+  React.useEffect(
+    () => {
+      update_title(values);
+    },
+    [values]
+  );
 
-    const midiPlayer = new Player({
-      targetFormat: 'mp3',
-      local: true,
-    });
-
-    let total = 0;
-    // midiPlayer.loadBase64File(midiFile, {
-    //   onsuccess: () => {
-    //     const tick = midiPlayer.getTickTime();
-    //     midiPlayer.addStartListener(() => {
-    //       setInterval(() => {
-    //         if (midiPlayer.isPlaying()) {
-    //           total++;
-    //         } else {
-    //         }
-    //       }, 60 / (midiPlayer.getBeatPerMinutes() * 2) * 1000);
-    //     });
-    //     setTimeout(() => midiPlayer.start(14, 29), 2000);
-    //   },
-    //   onerror: (error:Error) => console.log(error),
-    // });
-
-    midiPlayer.loadMatrix([8, 0, 8, 0, 12, 0, 12, 0, 13, 0, 13, 0, 12, 0, 0, 0, 11, 0, 11, 0, 10, 0, 10, 0, 9, 0, 9, 0, 8], {
-      onsuccess: () => {
-        setTimeout(() => midiPlayer.start(), 2000);
-      },
-      onerror: (error:Error) => console.error(error),
-    });
-
-    (window as any).player = midiPlayer;
-  };
-
-  const testParser = () => {
-    const parser = new MidiFileParser();
-    const file = parser.parse(atob(midiFile.split(',')[1]));
-    const analyser = new MidiAnalyser();
-    analyser.analyseMidiFile(file);
-    (window as any).analyser = analyser;
-  };
+  const update_title = (values:number[]) {
+    let level = 0;
+    // for (let i = 0; i < 4; i++) {
+    //   if ()
+    // }
+  }
 
   return (
-    <div>
-      <button onClick={clickButton}>Click</button>
-      <button onClick={testParser}>Test Parser</button>
+    <div className='container'>
+      <div className='title'>{title}</div>
+      {items.map((item) => {
+        return (
+          <Bar
+              key={item.name}
+              name={item.name}
+              total={item.total}
+              value={item.value} />
+        );
+      })}
     </div>
   );
 }

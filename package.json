@@ -8,6 +8,8 @@
   "devDependencies": {
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
+    "copy-webpack-plugin": "^6.0.3",
+    "css-loader": "^4.3.0",
     "html-webpack-plugin": "^4.3.0",
     "style-loader": "^1.2.1",
     "ts-loader": "^7.0.5",
